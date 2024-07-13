@@ -1,18 +1,22 @@
-package repository;
+package mate.academy.bookstore.repository;
 
-import lombok.RequiredArgsConstructor;
-import model.Book;
+import java.util.List;
+import mate.academy.bookstore.model.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
+
     private final SessionFactory sessionFactory;
+
+    @Autowired
+    public BookRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public Book save(Book book) {

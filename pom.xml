@@ -35,7 +35,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -65,9 +64,7 @@
 			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -103,5 +100,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

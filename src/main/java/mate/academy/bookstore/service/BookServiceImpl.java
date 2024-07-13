@@ -1,11 +1,10 @@
-package service;
-
-import lombok.RequiredArgsConstructor;
-import model.Book;
-import org.springframework.stereotype.Service;
-import repository.BookRepository;
+package mate.academy.bookstore.service;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import mate.academy.bookstore.model.Book;
+import mate.academy.bookstore.repository.BookRepository;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
