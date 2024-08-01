@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: create-books-table
+      id: add-is_boolean-column-to-book-table
       author: svg
       changes:
         - createTable:
@@ -31,12 +31,12 @@ databaseChangeLog:
                     unique: true
               - column:
                   name: price
-                  type: bigint
+                  type: decimal
                   constraints:
                     nullable: false
               - column:
                   name: description
                   type: varchar(255)
               - column:
-                  name: coverImage
+                  name: cover_image
                   type: varchar(255)
