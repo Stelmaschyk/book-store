@@ -7,6 +7,7 @@ import mate.academy.bookstore.dto.CreateBookRequestDto;
 import mate.academy.bookstore.dto.UpdateBookRequestDto;
 import mate.academy.bookstore.model.Book;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(config = MapperConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -17,5 +18,5 @@ public interface BookMapper {
 
     Book toModel(CreateBookRequestDto requestDto);
 
-    Book updateBook(UpdateBookRequestDto updateBook);
+    void updateBookFromDto(UpdateBookRequestDto book, @MappingTarget Book entity);
 }

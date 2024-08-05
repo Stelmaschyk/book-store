@@ -4,7 +4,7 @@ databaseChangeLog:
       author: svg
       changes:
         - createTable:
-            tableName: book
+            tableName: books
             columns:
               - column:
                   name: id
@@ -40,3 +40,10 @@ databaseChangeLog:
               - column:
                   name: cover_image
                   type: varchar(255)
+              - column:
+                  name: is_deleted
+                  type: bit
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+
