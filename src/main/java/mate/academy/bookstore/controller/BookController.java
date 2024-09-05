@@ -3,6 +3,7 @@ package mate.academy.bookstore.controller;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.BookDto;
+import mate.academy.bookstore.dto.BookSearchParametersDto;
 import mate.academy.bookstore.dto.CreateBookRequestDto;
 import mate.academy.bookstore.dto.UpdateBookRequestDto;
 import mate.academy.bookstore.service.BookService;
@@ -52,4 +53,10 @@ public class BookController {
     public void deleteBookById(@PathVariable Long id) {
         bookService.deleteById(id);
     }
+
+    @GetMapping("/search")
+    public List<BookDto> searchBook(BookSearchParametersDto searchParameters) {
+        return bookService.search(searchParameters);
+    }
+
 }
