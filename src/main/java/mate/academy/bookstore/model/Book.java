@@ -6,11 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.Setter;
-import mate.academy.bookstore.validation.Isbn;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -29,10 +27,8 @@ public class Book {
     @Column(nullable = false)
     private String author;
     @Column(nullable = false, unique = true)
-    @Isbn
     private String isbn;
     @Column(nullable = false)
-    @Positive
     private BigDecimal price;
     private String description;
     private String coverImage;

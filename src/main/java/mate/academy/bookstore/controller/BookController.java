@@ -1,7 +1,6 @@
 package mate.academy.bookstore.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.BookDto;
@@ -47,7 +46,7 @@ public class BookController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BookDto updateBookById(@PathVariable @Positive Long id,
+    public BookDto updateBookById(@PathVariable Long id,
                                   @RequestBody @Valid UpdateBookRequestDto updateDto) {
         return bookService.updateBookById(id, updateDto);
     }
