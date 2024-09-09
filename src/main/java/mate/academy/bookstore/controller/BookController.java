@@ -9,7 +9,6 @@ import mate.academy.bookstore.dto.CreateBookRequestDto;
 import mate.academy.bookstore.dto.UpdateBookRequestDto;
 import mate.academy.bookstore.service.BookService;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/books")
-@Validated
 public class BookController {
 
     private final BookService bookService;
