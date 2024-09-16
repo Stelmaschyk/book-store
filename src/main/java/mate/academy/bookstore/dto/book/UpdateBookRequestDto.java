@@ -1,7 +1,6 @@
-package mate.academy.bookstore.dto;
+package mate.academy.bookstore.dto.book;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -17,7 +16,7 @@ public class UpdateBookRequestDto {
     private String author;
     @Isbn
     private String isbn;
-    @NotNull
+    @NotBlank
     @Positive
     private BigDecimal price;
     @Size(max = 100)
