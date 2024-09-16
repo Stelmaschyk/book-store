@@ -60,6 +60,6 @@ public class CustomGlobalException extends ResponseEntityExceptionHandler {
         body.put(STATUS_FIELD, HttpStatus.BAD_REQUEST);
         List<String> errors = ex.getMessage().lines().toList();
         body.put(ERRORS_FIELD, errors);
-        return new ResponseEntity<>(body, headers, status);
+        return new ResponseEntity<>(body, headers, HttpStatus.BAD_REQUEST);
     }
 }
