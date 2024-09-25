@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-users-in-users-table
+      author: svg
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "admin@gmail.com"
+              - column:
+                  name: password
+                  value: "1234"
+              - column:
+                  name: first_name
+                  value: "Admin"
+              - column:
+                  name: last_name
+                  value: "Administratovich"
+              - column:
+                  name: shipping_address
+                  value: "123 Main St, Admin City, Ukraine"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "user@gmail.com"
+              - column:
+                  name: password
+                  value: "1234"
+              - column:
+                  name: first_name
+                  value: "User"
+              - column:
+                  name: last_name
+                  value: "Userovich"
+              - column:
+                  name: shipping_address
+                  value: "123 Main St, Admin City, Ukraine"
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: email
+                  value: "customer@gmail.com"
+              - column:
+                  name: password
+                  value: "1234"
+              - column:
+                  name: first_name
+                  value: "Customer"
+              - column:
+                  name: last_name
+                  value: "Customerovich"
+              - column:
+                  name: shipping_address
+                  value: "123 Main St, Admin City, Ukraine"

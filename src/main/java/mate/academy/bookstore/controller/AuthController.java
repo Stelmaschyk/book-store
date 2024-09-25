@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Authentication", description = "Managing registration API")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
     private final UserService userService;
 
     @Operation(summary = "register user with new email")
-    @PostMapping("/registration")
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     private UserResponseDto registerUser(@RequestBody @Valid UserRegistrationRequestDto requestDto)
             throws RegistrationException {
