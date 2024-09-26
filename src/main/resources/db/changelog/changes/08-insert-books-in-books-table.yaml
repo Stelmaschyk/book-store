@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-book
+      author: sgv
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Neurofitness"}
+              - column: {name: author, value: "UnNamed"}
+              - column: {name: isbn, value: "978-999999999"}
+              - column: {name: price, value: 22.22}
+              - column: {name: description, value: "Something new knowledge about brain working"}
+              - column: {name: cover_image, value: "abcd.jpg"}
