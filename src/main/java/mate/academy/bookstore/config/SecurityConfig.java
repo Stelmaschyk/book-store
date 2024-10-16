@@ -42,10 +42,7 @@ public class SecurityConfig {
                         "/error",
                         "/api/books/search",
                         "/api/books",
-                        "/api/books/{id}",
-                        "/api/categories",
-                        "/api/categories/{id}",
-                    "/api/categories/{id}/books")
+                        "/api/books/{id}")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
