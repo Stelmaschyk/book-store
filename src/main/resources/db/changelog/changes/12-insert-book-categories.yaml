@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-books-categories
+      author: svg
+      changes:
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 1 }
+              - column: { name: category_id, value: 1 }
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 2 }
+              - column: { name: category_id, value: 2 }
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 3 }
+              - column: { name: category_id, value: 3 }
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 4 }
+              - column: { name: category_id, value: 1 }
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 5 }
+              - column: { name: category_id, value: 2 }
+        - insert:
+            tableName: categories_books
+            columns:
+              - column: { name: books_id, value: 6 }
+              - column: { name: category_id, value: 3 }

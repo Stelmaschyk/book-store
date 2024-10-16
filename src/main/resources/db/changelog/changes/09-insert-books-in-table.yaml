@@ -1,0 +1,59 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-book
+      author: sgv
+      changes:
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Neurofitness" }
+              - column: { name: author, value: "UnNamed" }
+              - column: { name: isbn, value: "978-999999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "A Brain Surgeon's Secrets to Boost Performance and Unleash Creativity" }
+              - column: { name: cover_image, value: "abcd.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Good Energy" }
+              - column: { name: author, value: "Casey Means MD" }
+              - column: { name: isbn, value: "978-299999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "The Surprising Connection Between Metabolism and Limitless Health" }
+              - column: { name: cover_image, value: "abcd.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Dragon's Prophecy" }
+              - column: { name: author, value: "Jonathan Cahn" }
+              - column: { name: isbn, value: "978-399999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "Newest stunning blockbuster" }
+              - column: { name: cover_image, value: "abcd.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Boyfriend" }
+              - column: { name: author, value: "Freida McFadden" }
+              - column: { name: isbn, value: "978-499999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "Twisting thriller from the #1 New York Times" }
+              - column: { name: cover_image, value: "abcd.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "The Housemaid" }
+              - column: { name: author, value: "Freida McFadden" }
+              - column: { name: isbn, value: "978-599999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "An absolutely addictive psychological thriller" }
+              - column: { name: cover_image, value: "abcd.jpg" }
+        - insert:
+            tableName: books
+            columns:
+              - column: { name: title, value: "Don't Believe Everything You Think" }
+              - column: { name: author, value: "Joseph Nguyen" }
+              - column: { name: isbn, value: "978-699999999" }
+              - column: { name: price, value: 22.22 }
+              - column: { name: description, value: "a practical guide to help readers overcomenegative thought patterns and live a more fulfilling life." }
+              - column: { name: cover_image, value: "abcd.jpg" }
