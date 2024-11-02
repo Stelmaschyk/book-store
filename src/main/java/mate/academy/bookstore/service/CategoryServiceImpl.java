@@ -12,6 +12,7 @@ import mate.academy.bookstore.mapper.CategoryMapper;
 import mate.academy.bookstore.model.Category;
 import mate.academy.bookstore.repository.book.BookRepository;
 import mate.academy.bookstore.repository.category.CategoryRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +31,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryResponseDto> findAll(Pageable pageable) {
-        List<Category> categoryDtos = categoryRepository.findAll(pageable).getContent();
-        return categoryMapper.toCategoryDto(categoryDtos);
+    public Page<CategoryResponseDto> findAll(Pageable pageable) {
+        Page<Category> categoryDtos = categoryRepository.findAll(pageable);
+        return categoryDtos.map(categoryMapper::toCategoryDto);
     }
 
     @Override
@@ -42,6 +43,7 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toCategoryDto(category);
     }
 
+    @Override
     public CategoryResponseDto updateCategoryById(Long id, UpdateCategoryRequestDto updateDto) {
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Can't find category by id " + id));

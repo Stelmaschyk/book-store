@@ -5,14 +5,13 @@ import mate.academy.bookstore.dto.book.BookDto;
 import mate.academy.bookstore.dto.category.CategoryRequestDto;
 import mate.academy.bookstore.dto.category.CategoryResponseDto;
 import mate.academy.bookstore.dto.category.UpdateCategoryRequestDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
-@Service
 public interface CategoryService {
     CategoryResponseDto save(CategoryRequestDto requestDto);
 
-    List<CategoryResponseDto> findAll(Pageable pageable);
+    Page<CategoryResponseDto> findAll(Pageable pageable);
 
     CategoryResponseDto getById(Long id);
 

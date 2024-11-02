@@ -14,6 +14,7 @@ import mate.academy.bookstore.dto.category.CategoryResponseDto;
 import mate.academy.bookstore.dto.category.UpdateCategoryRequestDto;
 import mate.academy.bookstore.service.BookService;
 import mate.academy.bookstore.service.CategoryService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,9 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Category", description = "Endpoints for managing categories")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/categories")
 public class CategoryController {
-
     private final CategoryService categoryService;
     private final BookService bookService;
 
@@ -54,7 +54,7 @@ public class CategoryController {
 
     @Operation(summary = "Get all available categories with pagination")
     @GetMapping
-    public List<CategoryResponseDto> getAllCategories(Pageable pageable) {
+    public Page<CategoryResponseDto> getAllCategories(Pageable pageable) {
         return categoryService.findAll(pageable);
     }
 
