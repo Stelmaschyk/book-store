@@ -4,17 +4,17 @@ databaseChangeLog:
       author: sgv
       changes:
         - insert:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column: { name: user_id, value: 1 }
               - column: { name: role_id, value: 1 }
         - insert:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column: {name: user_id, value: 2}
               - column: {name: role_id, value: 2}
         - insert:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column: { name: user_id, value: 3 }
               - column: { name: role_id, value: 2 }

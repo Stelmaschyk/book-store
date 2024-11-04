@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user-roles-table
+      id: create-users-roles-table
       author: svg
       changes:
         - createTable:
-            tableName: user_roles
+            tableName: users_roles
             columns:
               - column:
                   name: user_id
@@ -17,17 +17,17 @@ databaseChangeLog:
                   constraints:
                     nullable: false
           addPrimaryKey:
-            tableName: user_roles
+            tableName: users_roles
             columnNames: user_id, role_id
-            constraintName: pk_user_roles
+            constraintName: pk_users_roles
         - addForeignKeyConstraint:
-            baseTableName: user_roles
+            baseTableName: users_roles
             baseColumnNames: user_id
             constraintName: fk_user_id
             referencedTableName: users
             referencedColumnNames: id
         - addForeignKeyConstraint:
-            baseTableName: user_roles
+            baseTableName: users_roles
             baseColumnNames: role_id
             constraintName: fk_role_id
             referencedTableName: roles
