@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private String shippingAddress;
     @Column(nullable = false)
     private boolean isDeleted = false;
-    @ManyToMany //(fetch = FetchType.EAGER)
+    @ManyToMany
     @ToStringExclude
     @EqualsAndHashCode.Exclude
     @JoinTable(name = "users_roles",
