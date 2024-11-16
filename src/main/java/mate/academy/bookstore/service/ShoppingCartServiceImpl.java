@@ -1,14 +1,14 @@
 package mate.academy.bookstore.service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore.dto.cartitem.CartItemDto;
 import mate.academy.bookstore.dto.cartitem.CartItemRequestDto;
+import mate.academy.bookstore.dto.cartitem.CartItemResponseDto;
 import mate.academy.bookstore.dto.cartitem.CartItemUpdateDto;
-import mate.academy.bookstore.dto.shoppingcart.ShoppingCartDto;
-import mate.academy.bookstore.exception.CartItemNotUnique;
+import mate.academy.bookstore.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.bookstore.exception.EntityNotFoundException;
 import mate.academy.bookstore.mapper.CartItemMapper;
 import mate.academy.bookstore.mapper.ShoppingCartMapper;
@@ -17,8 +17,8 @@ import mate.academy.bookstore.model.CartItem;
 import mate.academy.bookstore.model.ShoppingCart;
 import mate.academy.bookstore.model.User;
 import mate.academy.bookstore.repository.book.BookRepository;
+import mate.academy.bookstore.repository.cartitem.CartItemRepository;
 import mate.academy.bookstore.repository.shoppingcart.ShoppingCartRepository;
-import mate.academy.bookstore.repository.сartItem.CartItemRepository;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,35 +38,36 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     @Override
-    public ShoppingCartDto getCart(String email) {
+    public ShoppingCartResponseDto getShoppingCart(String email) {
         return shoppingCartMapper.toDto(shoppingCartRepository.findByUserEmail(email));
     }
 
     @Override
-    public CartItemDto addCartItem(User user, CartItemRequestDto request) {
+    public CartItemResponseDto addCartItem(User user, CartItemRequestDto request) {
         Optional<Book> optionalBook = bookRepository.findById(request.getBookId());
         Book book = optionalBook.orElseThrow(
-            () -> new EntityNotFoundException("There is not such book"));
+                () -> new EntityNotFoundException("There is not such book"));
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserEmail(user.getEmail());
         if (cartItemRepository.existsByBook(book)) {
             List<CartItem> cartItemsByBook = cartItemRepository.findByBook(book);
             for (CartItem cartItem : cartItemsByBook) {
                 if (Objects.equals(cartItem.getShoppingCart().getId(), shoppingCart.getId())) {
-                    throw new CartItemNotUnique("Cart item with book " + book.getId()
-                        + " already exists");
+                    throw new NoSuchElementException("Cart item with book " + book.getId()
+                        + " already exists", null);
                 }
             }
         }
-        CartItem cartItem = cartItemMapper.toModel(request);
+        CartItem cartItem = cartItemMapper.toModel(request, book);
         cartItem.setBook(book);
         cartItem.setShoppingCart(shoppingCart);
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
 
     @Override
-    public CartItemDto updateCartItemById(User user, Long id, CartItemUpdateDto request) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(
-            () -> new EntityNotFoundException("There is not such car item"));
+    public CartItemResponseDto updateBooksQuantity(User user, Long cartItemId,
+                                                   CartItemUpdateDto request) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
+                    () -> new EntityNotFoundException("not found cart item by id: " + cartItemId));
         cartItem.setQuantity(request.getQuantity());
         return cartItemMapper.toDto(cartItemRepository.save(cartItem));
     }
@@ -75,5 +76,4 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     public void deleteById(Long id) {
         cartItemRepository.deleteById(id);
     }
-
 }

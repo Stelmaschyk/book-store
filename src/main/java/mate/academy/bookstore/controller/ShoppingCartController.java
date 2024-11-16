@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import mate.academy.bookstore.dto.cartitem.CartItemDto;
 import mate.academy.bookstore.dto.cartitem.CartItemRequestDto;
+import mate.academy.bookstore.dto.cartitem.CartItemResponseDto;
 import mate.academy.bookstore.dto.cartitem.CartItemUpdateDto;
-import mate.academy.bookstore.dto.shoppingcart.ShoppingCartDto;
+import mate.academy.bookstore.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.bookstore.model.User;
 import mate.academy.bookstore.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
@@ -31,33 +31,36 @@ public class ShoppingCartController {
     private final ShoppingCartService shoppingCartService;
 
     @PostMapping
-    @Operation(summary = "Add item cart", description = "Add item cart to the shopping cart")
-    public CartItemDto addItemCart(@RequestBody @Valid CartItemRequestDto request,
-                                   Authentication authentication) {
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Add books to cart", description = "Add books to the shopping cart")
+    public CartItemResponseDto addBookToCart(@RequestBody @Valid CartItemRequestDto request,
+                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.addCartItem(user, request);
     }
 
     @GetMapping
     @Operation(summary = "Get user cart",
-        description = "Receive user's shopping cart by email")
-    public ShoppingCartDto getCart(Authentication authentication) {
+            description = "Receive user's shopping cart by email")
+    public ShoppingCartResponseDto getCart(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        ShoppingCartDto cart = shoppingCartService.getCart(user.getEmail());
-        return cart;
+        return shoppingCartService.getShoppingCart(user.getEmail());
     }
 
     @PutMapping("/items/{id}")
-    @Operation(summary = "Update item cart", description = "Update item cart in the shopping cart")
-    public CartItemDto updateCartItem(@RequestBody @Valid CartItemUpdateDto request,
-                                      @PathVariable @Positive Long id,
-                                      Authentication authentication) {
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Update quantity in a cart", description = "Update books quantity in "
+            + "the shopping cart")
+    public CartItemResponseDto updateCartItem(@RequestBody @Valid CartItemUpdateDto request,
+                                              @PathVariable @Positive Long id,
+                                              Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        return shoppingCartService.updateCartItemById(user, id, request);
+        return shoppingCartService.updateBooksQuantity(user, id, request);
     }
 
     @DeleteMapping("/items/{id}")
-    @Operation(summary = "Delete item cart", description = "Delete item cart in the shopping cart")
+    @Operation(summary = "Delete book from cart", description = "Delete book from shopping "
+            + "cart")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCartItem(@PathVariable @Positive Long id) {
         shoppingCartService.deleteById(id);

@@ -1,4 +1,4 @@
-package mate.academy.bookstore.repository.сartItem;
+package mate.academy.bookstore.repository.cartitem;
 
 import java.util.List;
 import mate.academy.bookstore.model.Book;

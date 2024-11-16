@@ -3,9 +3,7 @@ package mate.academy.bookstore.dto.cartitem;
 import lombok.Data;
 
 @Data
-public class CartItemDto {
-    private Long id;
+public class CartItemResponseDto {
     private Long bookId;
-    private String bookTitle;
     private int quantity;
 }

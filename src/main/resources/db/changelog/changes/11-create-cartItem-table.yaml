@@ -28,6 +28,12 @@ databaseChangeLog:
                   type: int
                   constraints:
                     nullable: false
+              - column:
+                  name: is_deleted
+                  type: bit
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
 
         - addForeignKeyConstraint:
             baseTableName: cart_items

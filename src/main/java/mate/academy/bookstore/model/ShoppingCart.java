@@ -1,6 +1,5 @@
 package mate.academy.bookstore.model;
 
-import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -38,4 +38,9 @@ public class ShoppingCart {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "shoppingCart")
     private Set<CartItem> cartItems;
+
+    public void addCartItem(CartItem cartItem) {
+        cartItems.add(cartItem);
+        cartItem.setShoppingCart(this);
+    }
 }
