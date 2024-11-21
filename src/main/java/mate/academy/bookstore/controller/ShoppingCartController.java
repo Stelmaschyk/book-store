@@ -6,7 +6,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import mate.academy.bookstore.dto.cartitem.CartItemRequestDto;
-import mate.academy.bookstore.dto.cartitem.CartItemResponseDto;
 import mate.academy.bookstore.dto.cartitem.CartItemUpdateDto;
 import mate.academy.bookstore.dto.shoppingcart.ShoppingCartResponseDto;
 import mate.academy.bookstore.model.User;
@@ -33,7 +32,7 @@ public class ShoppingCartController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Add books to cart", description = "Add books to the shopping cart")
-    public CartItemResponseDto addBookToCart(@RequestBody @Valid CartItemRequestDto request,
+    public ShoppingCartResponseDto addBookToCart(@RequestBody @Valid CartItemRequestDto request,
                                            Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return shoppingCartService.addCartItem(user, request);
@@ -51,7 +50,7 @@ public class ShoppingCartController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Update quantity in a cart", description = "Update books quantity in "
             + "the shopping cart")
-    public CartItemResponseDto updateCartItem(@RequestBody @Valid CartItemUpdateDto request,
+    public ShoppingCartResponseDto updateCartItem(@RequestBody @Valid CartItemUpdateDto request,
                                               @PathVariable @Positive Long id,
                                               Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -66,4 +65,3 @@ public class ShoppingCartController {
         shoppingCartService.deleteById(id);
     }
 }
-
