@@ -1,5 +1,6 @@
 package mate.academy.bookstore.service;
 
+import jakarta.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +22,6 @@ import mate.academy.bookstore.model.User;
 import mate.academy.bookstore.repository.itemorder.OrderItemRepository;
 import mate.academy.bookstore.repository.order.OrderRepository;
 import mate.academy.bookstore.repository.shoppingcart.ShoppingCartRepository;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,18 +32,21 @@ public class OrderServiceImpl implements OrderService {
     private final ShoppingCartRepository shoppingCartRepository;
     private final OrderItemMapper orderItemMapper;
     private final OrderMapper orderMapper;
+    private final OrderItemService orderItemService;
 
+    @Transactional
     @Override
-    public OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto,
-                                        Pageable pageable) {
+    public OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto) {
         ShoppingCart shoppingCart = shoppingCartRepository.findByUserId(userId).orElseThrow(
                 () -> new EntityNotFoundException("Shopping cart not found by userId: " + userId));
         Set<CartItem> cartItems = shoppingCart.getCartItems();
         if (cartItems.isEmpty()) {
-            return new OrderResponseDto();
+            throw new EntityNotFoundException("Cart items not found in shoppingCart by userId: "
+                + userId);
         }
         Order order = setOrder(shoppingCart, orderRequestDto.getShippingAddress());
         order.setOrderItems(createSetOfOrderItems(order, cartItems));
+        cleanShoppingCart(shoppingCart);
         return orderMapper.toDto(order);
     }
 
@@ -54,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
             .toList();
     }
 
+    @Transactional
     @Override
     public void updateOrderStatus(Long orderId, OrderStatusRequestDto requestDto) {
         Order order = orderRepository.findById(orderId).orElseThrow(
@@ -71,13 +75,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderItemResponseDto getOrderItemByIdAndOrderId(Long orderId, Long orderItemId) {
-        return getOrderById(orderId).getOrderItems().stream()
-            .filter(orderItem -> orderItem.getId().equals(orderItemId))
-            .findFirst()
-            .map(orderItemMapper::toDto)
-            .orElseThrow(() -> new EntityNotFoundException(
-                "OrderItem with id " + orderItemId + " not found in Order with id " + orderId));
+    public OrderItemResponseDto getOrderItemByIdAndOrderId(Long orderItemId, Long orderId) {
+        return orderItemService.findOrderItemByOrderIdAndId(orderItemId, orderId);
     }
 
     private Set<OrderItem> createSetOfOrderItems(Order order, Set<CartItem> cartItems) {
@@ -113,5 +112,9 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingAddress(shippingAddress);
         order.setTotal(calculateTotalCartItemsCost(shoppingCart.getCartItems()));
         return orderRepository.save(order);
+    }
+
+    private void cleanShoppingCart(ShoppingCart shoppingCart) {
+        shoppingCart.getCartItems().clear();
     }
 }

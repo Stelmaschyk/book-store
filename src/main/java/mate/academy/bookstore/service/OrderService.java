@@ -6,10 +6,9 @@ import mate.academy.bookstore.dto.order.OrderResponseDto;
 import mate.academy.bookstore.dto.order.OrderStatusRequestDto;
 import mate.academy.bookstore.dto.orderitem.OrderItemResponseDto;
 import mate.academy.bookstore.model.User;
-import org.springframework.data.domain.Pageable;
 
 public interface OrderService {
-    OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto, Pageable pageable);
+    OrderResponseDto createOrder(Long userId, OrderRequestDto orderRequestDto);
 
     List<OrderResponseDto> getOrders(User user);
 
@@ -17,5 +16,5 @@ public interface OrderService {
 
     List<OrderItemResponseDto> getOrderItemsByOrderId(Long orderId);
 
-    OrderItemResponseDto getOrderItemByIdAndOrderId(Long orderId, Long orderItemId);
+    OrderItemResponseDto getOrderItemByIdAndOrderId(Long orderItemId, Long orderId);
 }

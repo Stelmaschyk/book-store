@@ -1,7 +1,6 @@
 package mate.academy.bookstore.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -12,7 +11,6 @@ import mate.academy.bookstore.dto.order.OrderStatusRequestDto;
 import mate.academy.bookstore.dto.orderitem.OrderItemResponseDto;
 import mate.academy.bookstore.model.User;
 import mate.academy.bookstore.service.OrderService;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -35,10 +33,10 @@ public class OrderController {
 
     @Operation(summary = "Submit order", description = "submit current order")
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public OrderResponseDto submitOrder(@RequestBody @Valid OrderRequestDto requestDto,
-                                        Pageable pageable,
                                         @AuthenticationPrincipal User user) {
-        return orderService.createOrder(user.getId(), requestDto, pageable);
+        return orderService.createOrder(user.getId(), requestDto);
     }
 
     @Operation(summary = "Get orders", description = "get user orders")
@@ -52,8 +50,6 @@ public class OrderController {
     @PatchMapping("/{orderId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.OK)
-    @ApiResponse(responseCode = "202",
-                description = "Order status updated successfully")
     public void updateOrderStatus(@PathVariable Long orderId,
                                   @RequestBody OrderStatusRequestDto requestDto) {
         orderService.updateOrderStatus(orderId, requestDto);
