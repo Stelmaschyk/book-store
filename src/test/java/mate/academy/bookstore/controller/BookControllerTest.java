@@ -5,18 +5,25 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.Set;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.sql.DataSource;
+import lombok.SneakyThrows;
 import mate.academy.bookstore.dto.book.BookDto;
 import mate.academy.bookstore.dto.book.CreateBookRequestDto;
+import mate.academy.bookstore.utill.BookProvider;
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -29,34 +36,72 @@ public class BookControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    static void beforeAll(@Autowired WebApplicationContext applicationContext) {
+    static void beforeAll(@Autowired DataSource dataSource,
+                          @Autowired WebApplicationContext applicationContext
+    ) throws SQLException {
         mockMvc = MockMvcBuilders
             .webAppContextSetup(applicationContext)
             .apply(springSecurity())
             .build();
+        teardown(dataSource);
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(true);
+            ScriptUtils.executeSqlScript(
+                connection,
+                new ClassPathResource(
+                    "database/categories/add-categories-in-category-table.sql")
+            );
+            ScriptUtils.executeSqlScript(
+                connection,
+                new ClassPathResource(
+                    "database/books/add-books-in-table.sql")
+            );
+        }
+    }
+
+    @AfterAll
+    static void afterAll(
+        @Autowired DataSource dataSource
+    ) {
+        teardown(dataSource);
+    }
+
+    @SneakyThrows
+    static void teardown(DataSource dataSource) {
+        try (Connection connection = dataSource.getConnection()) {
+            connection.setAutoCommit(true);
+            ScriptUtils.executeSqlScript(
+                connection,
+                new ClassPathResource(
+                    "database/categories_books/delete-data-from-categories-books-table.sql")
+            );
+            ScriptUtils.executeSqlScript(
+                connection,
+                new ClassPathResource(
+                    "database/books/delete-books-from-books-table.sql")
+            );
+            ScriptUtils.executeSqlScript(
+                connection,
+                new ClassPathResource(
+                    "database/categories/delete-category-from-table-category.sql")
+            );
+        }
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("Create a new book")
     void createBook_ValidRequestDto_Success() throws Exception {
-        CreateBookRequestDto requestDto = new CreateBookRequestDto()
-                .setTitle("Title")
-                .setAuthor("Author")
-                .setIsbn("978-9996989271")
-                .setPrice(BigDecimal.valueOf(22))
-                .setDescription("Boost Performance and Unleash Creativity")
-                .setCoverImage("image.jpeg")
-                .setCategoryIds(Set.of(1L));
+        CreateBookRequestDto requestDto = BookProvider.createRequestDto();
 
         BookDto expected = new BookDto()
-                .setTitle(requestDto.getTitle())
-                .setAuthor(requestDto.getAuthor())
-                .setIsbn(requestDto.getIsbn())
-                .setPrice(requestDto.getPrice())
-                .setDescription(requestDto.getDescription())
-                .setCoverImage(requestDto.getCoverImage())
-                .setCategoryIds(requestDto.getCategoryIds());
+            .setTitle(requestDto.getTitle())
+            .setAuthor(requestDto.getAuthor())
+            .setIsbn(requestDto.getIsbn())
+            .setPrice(requestDto.getPrice())
+            .setDescription(requestDto.getDescription())
+            .setCoverImage(requestDto.getCoverImage())
+            .setCategoryIds(requestDto.getCategoryIds());
 
         String jsonRequest = objectMapper.writeValueAsString(requestDto);
 
@@ -64,11 +109,11 @@ public class BookControllerTest {
                 .content(jsonRequest)
                 .contentType(MediaType.APPLICATION_JSON)
             )
-                .andExpect(status().isCreated())
-                .andReturn();
+            .andExpect(status().isCreated())
+            .andReturn();
 
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
-                BookDto.class);
+            BookDto.class);
         EqualsBuilder.reflectionEquals(expected, actual);
     }
 }
