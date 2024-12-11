@@ -45,7 +45,6 @@ public class BookControllerTest {
     protected static MockMvc mockMvc;
     private static final int EXPECTED_LENGTH = 4;
     private static final Long TEST_ID = 2L;
-    private static final String CATEGORY_NAME = "Fantasy";
     private static final String TEST_BOOK_AUTHOR = "Nicolas";
     private static final String TEST_BOOK_TITLE = "New Year";
     @Autowired

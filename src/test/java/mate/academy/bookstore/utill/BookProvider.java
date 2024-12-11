@@ -16,7 +16,6 @@ public class BookProvider {
     private static final String TEST_IMAGE = "image.jpg";
     private static final BigDecimal TEST_PRICE = BigDecimal.valueOf(55);
     private static final Long TEST_CATEGORIES_ID = 1L;
-    private static final Long TEST_UPDATE_ID = 2L;
     private static final String TEST_UPDATE_TITLE = "Title";
     private static final String TEST_UPDATE_AUTHOR = "Author";
     private static final String TEST_UPDATE_ISBN = "998-9996689279";
