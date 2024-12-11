@@ -2,6 +2,7 @@ package mate.academy.bookstore.utill;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.stream.Collectors;
 import mate.academy.bookstore.dto.book.CreateBookRequestDto;
 import mate.academy.bookstore.dto.book.UpdateBookRequestDto;
 import mate.academy.bookstore.model.Book;
@@ -10,14 +11,15 @@ import mate.academy.bookstore.model.Category;
 public class BookProvider {
     private static final String TEST_TITLE = "Title";
     private static final String TEST_AUTHOR = "Author";
-    private static final String TEST_ISBN = "978-9996989271";
+    private static final String TEST_ISBN = "978-8996989277";
     private static final String TEST_DESCRIPTION = "Description";
     private static final String TEST_IMAGE = "image.jpg";
     private static final BigDecimal TEST_PRICE = BigDecimal.valueOf(55);
     private static final Long TEST_CATEGORIES_ID = 1L;
+    private static final Long TEST_UPDATE_ID = 2L;
     private static final String TEST_UPDATE_TITLE = "Title";
     private static final String TEST_UPDATE_AUTHOR = "Author";
-    private static final String TEST_UPDATE_ISBN = "998-9996989271";
+    private static final String TEST_UPDATE_ISBN = "998-9996689279";
     private static final BigDecimal TEST_UPDATE_PRICE = BigDecimal.valueOf(105);
 
     public static CreateBookRequestDto createRequestDto() {
@@ -50,6 +52,17 @@ public class BookProvider {
             .setPrice(TEST_UPDATE_PRICE)
             .setDescription(TEST_DESCRIPTION)
             .setCoverImage(TEST_IMAGE)
-            .setCategoryIds(Set.of(id));
+            .setCategoryIds(Set.of(TEST_CATEGORIES_ID));
     };
+
+    public static Book updateBook(UpdateBookRequestDto updateBookRequestDtoDto) {
+        return new Book()
+            .setTitle(updateBookRequestDtoDto.getTitle())
+            .setAuthor(updateBookRequestDtoDto.getAuthor())
+            .setPrice(updateBookRequestDtoDto.getPrice())
+            .setIsbn(updateBookRequestDtoDto.getIsbn())
+            .setCategories(updateBookRequestDtoDto.getCategoryIds().stream()
+                .map(id -> new Category().setId(id))
+                .collect(Collectors.toSet()));
+    }
 }
