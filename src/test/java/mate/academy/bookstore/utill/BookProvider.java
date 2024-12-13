@@ -30,7 +30,7 @@ public class BookProvider {
             .setDescription(TEST_DESCRIPTION)
             .setCoverImage(TEST_IMAGE)
             .setCategoryIds(Set.of(TEST_CATEGORIES_ID));
-    };
+    }
 
     public static Book createBook(CreateBookRequestDto requestDto, Category category) {
         return new Book()
@@ -52,7 +52,7 @@ public class BookProvider {
             .setDescription(TEST_DESCRIPTION)
             .setCoverImage(TEST_IMAGE)
             .setCategoryIds(Set.of(TEST_CATEGORIES_ID));
-    };
+    }
 
     public static Book updateBook(UpdateBookRequestDto updateBookRequestDtoDto) {
         return new Book()

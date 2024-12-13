@@ -8,11 +8,11 @@ public class CategoryProvider {
         return new UpdateCategoryRequestDto()
             .setName("drama")
             .setDescription("updated description");
-    };
+    }
 
     public static CategoryRequestDto createCategoryRequestDto() {
         return new CategoryRequestDto()
             .setName("Thriller")
             .setDescription("dramatic context");
-    };
+    }
 }
