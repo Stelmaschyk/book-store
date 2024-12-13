@@ -130,7 +130,7 @@ public class BookControllerTest {
         EqualsBuilder.reflectionEquals(expected, actual);
     }
 
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user")
     @Test
     @DisplayName("get all books")
     void getAllBook_GiveBooks_ReturnAllBooksDto() throws Exception {
@@ -150,7 +150,7 @@ public class BookControllerTest {
         assertThat(bookIds).containsExactlyInAnyOrder(1L, 2L, 3L, 4L);
     }
 
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user")
     @Test
     @DisplayName("Get book by id")
     void getById_WithValidBookId_ShouldReturnBookDto() throws Exception {
@@ -191,7 +191,7 @@ public class BookControllerTest {
                 .andReturn();
     }
 
-    @WithMockUser(username = "user", roles = {"USER"})
+    @WithMockUser(username = "user")
     @Test
     @DisplayName("search book by parameters title or author")
     void searchBook_BookSearchParametersDto_ReturnBookDto() throws Exception {
