@@ -1,4 +1,4 @@
-package mate.academy.bookstore.services;
+package mate.academy.bookstore.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,7 +18,6 @@ import mate.academy.bookstore.exception.EntityNotFoundException;
 import mate.academy.bookstore.mapper.BookMapper;
 import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.repository.book.BookRepository;
-import mate.academy.bookstore.service.BookServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -115,7 +114,7 @@ public class BookServiceTest {
         Find all books with a valid request
         Should return a list of BookDto
             """)
-    public void findAllBooks_WithValidCreateBookRequestDto_ShouldReturnListOfBookDto() {
+    public void findAllBooks_WithValidPageable_ShouldReturnListOfBookDto() {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Book> bookPage = new PageImpl<>(books, pageable, books.size());
 

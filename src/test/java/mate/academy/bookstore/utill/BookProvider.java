@@ -8,7 +8,7 @@ import mate.academy.bookstore.dto.book.UpdateBookRequestDto;
 import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.model.Category;
 
-public class BookProvider {
+public final class BookProvider {
     private static final String TEST_TITLE = "Title";
     private static final String TEST_AUTHOR = "Author";
     private static final String TEST_ISBN = "978-8996989277";

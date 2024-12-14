@@ -86,7 +86,7 @@ public class BookControllerTest {
             ScriptUtils.executeSqlScript(
                     connection,
                 new ClassPathResource(
-                        "database/categories_books/delete-data-from-categories-books-table.sql")
+                    "database/categories_books/delete-all-from-categories-books-table.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
@@ -185,7 +185,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("delete book by id")
     void deleteById_WithValidBookId_Success() throws Exception {
-        MvcResult result = mockMvc.perform(delete("/books/{id}", 4)
+        mockMvc.perform(delete("/books/{id}", 4)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();

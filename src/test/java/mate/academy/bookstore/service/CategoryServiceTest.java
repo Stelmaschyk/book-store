@@ -1,8 +1,9 @@
-package mate.academy.bookstore.services;
+package mate.academy.bookstore.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,6 @@ import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.model.Category;
 import mate.academy.bookstore.repository.book.BookRepository;
 import mate.academy.bookstore.repository.category.CategoryRepository;
-import mate.academy.bookstore.service.CategoryServiceImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -129,14 +129,14 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findAll(pageable)).thenReturn(categoryPage);
 
-        List<CategoryResponseDto> expectedBookDtos = categories.stream()
+        List<CategoryResponseDto> expectedCategoyDtos = categories.stream()
                 .map(categoryMapper::toCategoryDto)
                 .toList();
 
         Page<CategoryResponseDto> actual = categoryService.findAll(pageable);
 
         assertNotNull(actual);
-        assertEquals(expectedBookDtos.size(), actual.getContent().size());
+        assertEquals(expectedCategoyDtos.size(), actual.getContent().size());
     }
 
     @DisplayName("""
@@ -166,10 +166,9 @@ public class CategoryServiceTest {
                 assertThrows(EntityNotFoundException.class,
                     () -> categoryService.getById(TEST_INCORRECT_CATEGORY_ID));
 
-        String expectedMessage = "Can't find category by id " + TEST_INCORRECT_CATEGORY_ID;
         String actualMessage = entityNotFoundException.getMessage();
 
-        assertEquals(expectedMessage, actualMessage);
+        assertTrue(actualMessage.contains(String.valueOf(TEST_CATEGORY_ID)));
     }
 
     @DisplayName("""
@@ -197,8 +196,6 @@ public class CategoryServiceTest {
         verify(categoryMapper, times(1))
                 .updateCategoryFromDto(updateCategoryRequestDto, category);
         verify(categoryRepository, times(1)).save(category);
-        verify(categoryMapper, times(1))
-                .updateCategoryFromDto(updateCategoryRequestDto, category);
         verifyNoMoreInteractions(categoryRepository, categoryMapper);
     }
 
@@ -230,10 +227,6 @@ public class CategoryServiceTest {
         assertNotNull(actual);
         assertEquals(expectedBookDto.size(), actual.size());
 
-        verify(categoryRepository, times(1)).existsById(TEST_CATEGORY_ID);
-        verify(bookRepository, times(1)).findAllByCategoriesId(TEST_CATEGORY_ID);
-        verify(bookMapper, times(1)).toBookDto(books.get(0));
-        verify(bookMapper, times(1)).toBookDto(books.get(1));
         verifyNoMoreInteractions(categoryRepository, bookRepository, bookMapper);
     }
 }

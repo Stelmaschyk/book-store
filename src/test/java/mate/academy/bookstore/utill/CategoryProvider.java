@@ -3,7 +3,7 @@ package mate.academy.bookstore.utill;
 import mate.academy.bookstore.dto.category.CategoryRequestDto;
 import mate.academy.bookstore.dto.category.UpdateCategoryRequestDto;
 
-public class CategoryProvider {
+public final class CategoryProvider {
     public static UpdateCategoryRequestDto createUpdateCategoryRequestDto() {
         return new UpdateCategoryRequestDto()
             .setName("drama")

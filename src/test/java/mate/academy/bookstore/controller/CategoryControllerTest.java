@@ -85,7 +85,7 @@ public class CategoryControllerTest {
             ScriptUtils.executeSqlScript(
                     connection,
                     new ClassPathResource(
-                    "database/categories_books/delete-data-from-categories-books-table.sql")
+                        "database/categories_books/delete-all-from-categories-books-table.sql")
             );
             ScriptUtils.executeSqlScript(
                     connection,
@@ -146,8 +146,7 @@ public class CategoryControllerTest {
     @DisplayName("Get books list by category id")
     @Sql(scripts = "classpath:database/categories_books/add-books-to-categories.sql",
             executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-    @Sql(scripts = "classpath:database/categories_books"
-                + "/delete-data-from-categories-books-table.sql",
+    @Sql(scripts = "classpath:database/categories_books/delete-all-from-categories-books-table.sql",
                 executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
     void getBooksByCategory_ValidCategory_ShouldReturnListBookDto() throws Exception {
         MvcResult result = mockMvc.perform(get("/categories/{id}/books", TEST_CATEGORY_ID)
@@ -176,12 +175,10 @@ public class CategoryControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        JsonNode rootNode = objectMapper.readTree(result.getResponse().getContentAsString());
-        JsonNode contentNode = rootNode.get("content");
-        CategoryResponseDto[] actual = objectMapper.treeToValue(contentNode,
-            CategoryResponseDto[].class);
+        JsonNode root = objectMapper.readTree(result.getResponse().getContentAsString());
+        long totalElements = root.get("totalElements").asLong();
 
-        Assertions.assertEquals(TEST_CATEGORY_AMOUNT, actual.length);
+        Assertions.assertEquals(TEST_CATEGORY_AMOUNT, totalElements);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
