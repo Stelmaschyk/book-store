@@ -19,11 +19,8 @@ import mate.academy.bookstore.dto.book.BookDto;
 import mate.academy.bookstore.dto.book.BookSearchParametersDto;
 import mate.academy.bookstore.dto.book.CreateBookRequestDto;
 import mate.academy.bookstore.dto.book.UpdateBookRequestDto;
-import mate.academy.bookstore.model.Book;
 import mate.academy.bookstore.utill.BookProvider;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -127,7 +124,13 @@ public class BookControllerTest {
 
         BookDto actual = objectMapper.readValue(result.getResponse().getContentAsString(),
                 BookDto.class);
-        EqualsBuilder.reflectionEquals(expected, actual);
+
+        assertThat(actual)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(expected);
+
     }
 
     @WithMockUser(username = "user")
@@ -146,8 +149,9 @@ public class BookControllerTest {
                 .map(BookDto::getId)
                 .toList();
 
-        Assertions.assertEquals(EXPECTED_LENGTH, actual.length);
-        assertThat(bookIds).containsExactlyInAnyOrder(1L, 2L, 3L, 4L);
+        assertThat(bookIds)
+                .hasSize(EXPECTED_LENGTH)
+                .containsExactly(1L, 2L, 3L, 4L);
     }
 
     @WithMockUser(username = "user")
@@ -161,24 +165,32 @@ public class BookControllerTest {
 
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
-        Assertions.assertNotNull(actual);
-        Assertions.assertEquals(TEST_ID, actual.getId());
+
+        assertThat(actual.getId())
+                .isNotNull()
+                .isEqualTo(TEST_ID);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
     @Test
     @DisplayName("update book by id")
     void updateById_WithValidBookId_ShouldReturnUpdatedBookDto() throws Exception {
-        UpdateBookRequestDto updateDto = BookProvider.updateRequestDto(TEST_ID);
-        Book expected = BookProvider.updateBook(updateDto);
+        UpdateBookRequestDto updatedRequestDto = BookProvider.updateRequestDto(TEST_ID);
+        BookDto expected = BookProvider.updatedBookDto(updatedRequestDto);
         MvcResult result = mockMvc.perform(put("/books/{id}", TEST_ID)
-                .content(objectMapper.writeValueAsString(updateDto))
+                .content(objectMapper.writeValueAsString(updatedRequestDto))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
+
         BookDto actual = objectMapper.readValue(
                 result.getResponse().getContentAsString(), BookDto.class);
-        EqualsBuilder.reflectionEquals(expected, actual);
+
+        assertThat(actual)
+                .isNotNull()
+                .usingRecursiveComparison()
+                .ignoringFields("id", "categoryIds")
+                .isEqualTo(expected);
     }
 
     @WithMockUser(username = "admin", roles = {"ADMIN"})
@@ -206,10 +218,13 @@ public class BookControllerTest {
 
         BookDto[] actual = objectMapper.readValue(
             result.getResponse().getContentAsString(), BookDto[].class);
-        Assertions.assertEquals(EXPECTED_LENGTH, actual.length);
-        Assertions.assertTrue(Arrays.stream(actual).anyMatch(
-                (bookDto -> bookDto.getAuthor().equals(TEST_BOOK_AUTHOR))));
-        Assertions.assertTrue(Arrays.stream(actual).anyMatch(
-                (bookDto -> bookDto.getTitle().equals(TEST_BOOK_TITLE))));
+
+        assertThat(actual)
+                .isNotEmpty()
+                .hasSize(EXPECTED_LENGTH)
+                .anySatisfy(bookDto -> assertThat(bookDto.getAuthor())
+                    .isEqualTo(TEST_BOOK_AUTHOR))
+                .anySatisfy(bookDto -> assertThat(bookDto.getTitle())
+                    .isEqualTo(TEST_BOOK_TITLE));
     }
 }

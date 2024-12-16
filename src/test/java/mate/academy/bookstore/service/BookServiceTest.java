@@ -1,7 +1,6 @@
 package mate.academy.bookstore.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -100,8 +99,9 @@ public class BookServiceTest {
 
         BookDto actual = bookService.save(requestDto);
 
-        assertNotNull(actual);
-        assertEquals(expectedDto, actual);
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(expectedDto);
 
         verify(bookMapper, times(1)).toModel(requestDto);
         verify(bookRepository, times(1)).save(book);
@@ -126,8 +126,9 @@ public class BookServiceTest {
         when(bookMapper.toBookDto(books)).thenReturn(expectedDto);
         List<BookDto> actual = bookService.findAll(pageable);
 
-        assertNotNull(actual);
-        assertEquals(expectedDto, actual);
+        assertThat(actual)
+                .isNotEmpty()
+                .isEqualTo(expectedDto);
 
         verify(bookRepository, times(1)).findAll(pageable);
         verify(bookMapper, times(1)).toBookDto(books);
@@ -144,8 +145,9 @@ public class BookServiceTest {
 
         BookDto actual = bookService.findById(TEST_BOOK_ID);
 
-        assertNotNull(actual);
-        assertEquals(expectedDto, actual);
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(expectedDto);
     }
 
     @Test
@@ -161,7 +163,10 @@ public class BookServiceTest {
 
         String expectedMessage = "Can't find book by id " + INCORRECT_BOOK_ID;
         String actual = entityNotFoundException.getMessage();
-        assertEquals(expectedMessage, actual);
+
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(expectedMessage);
 
         verify(bookRepository, times(1)).findById(INCORRECT_BOOK_ID);
         verifyNoMoreInteractions(bookRepository);
@@ -178,8 +183,10 @@ public class BookServiceTest {
         when(bookMapper.toBookDto(updatedBook)).thenReturn(updatedExpectedDto);
 
         BookDto actual = bookService.updateBookById(TEST_BOOK_ID, updatedRequestDto);
-        assertNotNull(actual);
-        assertEquals(updatedExpectedDto, actual);
+
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(updatedExpectedDto);
 
         verify(bookRepository, times(1)).findById(TEST_BOOK_ID);
         verify(bookRepository, times(1)).save(book);

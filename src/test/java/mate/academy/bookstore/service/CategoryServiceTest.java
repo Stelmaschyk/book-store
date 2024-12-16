@@ -1,9 +1,7 @@
 package mate.academy.bookstore.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -108,8 +106,9 @@ public class CategoryServiceTest {
 
         CategoryResponseDto actual = categoryService.save(categoryRequestDto);
 
-        assertNotNull(actual);
-        assertEquals(TEST_CATEGORY_ID, actual.getId());
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(categoryResponseDto);
 
         verify(categoryMapper, times(1)).toModel(categoryRequestDto);
         verify(categoryRepository, times(1)).save(category);
@@ -135,8 +134,9 @@ public class CategoryServiceTest {
 
         Page<CategoryResponseDto> actual = categoryService.findAll(pageable);
 
-        assertNotNull(actual);
-        assertEquals(expectedCategoyDtos.size(), actual.getContent().size());
+        assertThat(actual)
+                .isNotEmpty()
+                .hasSize(expectedCategoyDtos.size());
     }
 
     @DisplayName("""
@@ -150,8 +150,9 @@ public class CategoryServiceTest {
 
         CategoryResponseDto actual = categoryService.getById(TEST_CATEGORY_ID);
 
-        assertNotNull(actual);
-        assertEquals(TEST_CATEGORY_ID, actual.getId());
+        assertThat(actual.getId())
+                .isPositive()
+                .isEqualTo(TEST_CATEGORY_ID);
     }
 
     @DisplayName("""
@@ -159,7 +160,7 @@ public class CategoryServiceTest {
         Should throw EntityNotFoundException
             """)
     @Test
-    void getCategoryById_WithNonExistingId_ShouldThrowException() {
+    void getCategoryById_WithIncorrectId_ShouldThrowException() {
         when(categoryRepository.findById(TEST_INCORRECT_CATEGORY_ID)).thenReturn(Optional.empty());
 
         EntityNotFoundException entityNotFoundException =
@@ -168,7 +169,9 @@ public class CategoryServiceTest {
 
         String actualMessage = entityNotFoundException.getMessage();
 
-        assertTrue(actualMessage.contains(String.valueOf(TEST_CATEGORY_ID)));
+        assertThat(actualMessage)
+                .isNotNull()
+                .contains(String.valueOf(TEST_CATEGORY_ID));
     }
 
     @DisplayName("""
@@ -190,8 +193,10 @@ public class CategoryServiceTest {
         CategoryResponseDto expected = categoryService
                 .updateCategoryById(TEST_CATEGORY_ID, updateCategoryRequestDto);
 
-        assertEquals(expected.getId(), updatedCategoryResponseDto.getId());
-        assertEquals(expected.getName(), updatedCategoryResponseDto.getName());
+        assertThat(expected)
+                .isNotNull()
+                .extracting("id", "name")
+                .containsExactly(TEST_CATEGORY_ID, updateCategoryRequestDto.getName());
 
         verify(categoryMapper, times(1))
                 .updateCategoryFromDto(updateCategoryRequestDto, category);
@@ -224,8 +229,10 @@ public class CategoryServiceTest {
         when(bookMapper.toBookDto(books.get(1))).thenReturn(expectedBookDto.get(1));
 
         List<BookDto> actual = categoryService.getBooksByCategoriesId(TEST_CATEGORY_ID);
-        assertNotNull(actual);
-        assertEquals(expectedBookDto.size(), actual.size());
+
+        assertThat(actual)
+                .isNotEmpty()
+                .hasSize(expectedBookDto.size());
 
         verifyNoMoreInteractions(categoryRepository, bookRepository, bookMapper);
     }
